@@ -92,6 +92,8 @@ export type AssetDetail = {
     severity: string;
     confidence: number;
     excerpt: string;
+    evidence_source?: 'nutrient_dws' | 'simulated_record';
+    no_active_leak?: boolean;
   }[];
   documents: { document_id: string; filename: string; title: string; date: string; text: string }[];
   failures: { event_id: string; date: string; severity: string; water_lost_gal: number; customers_affected: number }[];

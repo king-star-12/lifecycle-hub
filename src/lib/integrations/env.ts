@@ -1,4 +1,7 @@
-import 'server-only';
+// Server-side only. Imported by route handlers and by CLI scripts, so it cannot
+// carry the `server-only` guard -- that package throws outside Next's bundler.
+// Secrets here are read from process.env and are never NEXT_PUBLIC_, so nothing
+// in this file can reach the browser bundle.
 
 /**
  * Credential access. Every integration reports whether it is configured, so the

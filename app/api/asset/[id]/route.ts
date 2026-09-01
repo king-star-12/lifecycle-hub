@@ -40,7 +40,26 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .map(([day, category]) => ({ date: bundle.weather[day].date, category }))
     .sort((a, b) => b.date.localeCompare(a.date));
 
-  const findings = (ctx.findings.get(id) ?? []).map(([, f]) => f);
+  // Prefer findings recovered by the document pipeline over the simulator's
+  // own record. Where a report has actually been run through Nutrient, the
+  // product consumes what was *extracted* from the PDF -- the same position a
+  // real deployment is in, reading a utility's archive rather than a database
+  // it wishes existed. Provenance is reported either way.
+  let nutrient: Record<string, unknown>[] = [];
+  try {
+    nutrient = readJson<Record<string, unknown>[]>('nutrient-findings.json');
+  } catch {
+    nutrient = [];
+  }
+  const extractedFor = new Map(
+    nutrient.filter((f) => f.asset_id === id).map((f) => [f.document as string, f]),
+  );
+  const findings = (ctx.findings.get(id) ?? []).map(([, f]) => {
+    const fromPdf = extractedFor.get(f.document);
+    return fromPdf
+      ? { ...f, ...fromPdf, evidence_source: 'nutrient_dws' as const }
+      : { ...f, evidence_source: 'simulated_record' as const };
+  });
   const docs = readJson<GeneratedDocument[]>('documents.json').filter((d) =>
     d.asset_ids.includes(id),
   );

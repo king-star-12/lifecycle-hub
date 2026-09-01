@@ -300,6 +300,20 @@ export default function AssetPanel({ assetId, onClose }: { assetId: string; onCl
                       extraction {(f.confidence * 100).toFixed(0)}%
                     </span>
                   </div>
+                  {f.evidence_source === 'nutrient_dws' && (
+                    <div className="mt-1 flex items-center gap-1.5">
+                      <span className="rounded bg-[#5ac8a8]/15 px-1 py-[1px] text-[8px] uppercase tracking-wide text-[#5ac8a8]">
+                        extracted from PDF
+                      </span>
+                      <span className="text-[9px] text-ink-faint">via Nutrient DWS</span>
+                    </div>
+                  )}
+                  {f.no_active_leak && (
+                    <p className="mt-1 text-[9px] leading-relaxed text-amber-300/80">
+                      Report records no active leak at the time of inspection. That is an
+                      observation about one day, not a statement about condition.
+                    </p>
+                  )}
                   {doc && (
                     <button
                       onClick={() => setOpenDoc(openDoc === doc.document_id ? null : doc.document_id)}
