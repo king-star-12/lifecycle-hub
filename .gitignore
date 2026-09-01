@@ -8,3 +8,4 @@ data/synthetic/*.ndjson
 next-env.d.ts
 *.tsbuildinfo
 data/stage/
+.DS_Store

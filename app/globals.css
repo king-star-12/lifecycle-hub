@@ -1,76 +1,185 @@
 @import 'tailwindcss';
 
 /*
- * Clustral operator console.
+ * CLUE — Connected Lifecycle Utility Engine, a Clustral AI product.
  *
- * The palette is built for a control room: near-black ground so that risk
- * colour is the only thing that draws the eye, and a single accent used
- * exclusively for interactive affordances. Risk colours are deliberately not
- * a red-green ramp -- roughly 8% of men have a red-green colour vision
- * deficiency, and this is a safety tool. The ramp runs blue -> amber -> red
- * with monotonically increasing lightness contrast, so it stays readable when
- * hue information is lost.
+ * The palette is taken from the Clustral AI brand: the green, yellow and
+ * orange of the logo mark's node graph, slate text, and the #e5e7eb hairline
+ * used across clustralai.com. Light is the default because that is the brand's
+ * default; dark is offered because control rooms are dim and operators asked
+ * for it everywhere this kind of tool has shipped.
+ *
+ * Colours are declared as runtime custom properties rather than compiled
+ * constants, so the whole surface — including the map canvas, which reads them
+ * at draw time — repaints on a theme switch without a reload.
  */
 
-@theme {
-  --color-ground: #07090d;
-  --color-surface: #0d1117;
-  --color-raised: #141a23;
-  --color-line: #1e2632;
-  --color-line-bright: #2c3745;
+:root {
+  /* Brand: warm off-white ground, pure white panels, the site's hairline grey. */
+  --c-bg: #fbfaf3;
+  --c-surface: #ffffff;
+  --c-raised: #f6f7f4;
+  --c-line: #e5e7eb;
+  --c-line-strong: #d3d8e0;
 
-  --color-ink: #e8edf4;
-  --color-ink-dim: #97a3b4;
-  --color-ink-faint: #5d6b7d;
+  --c-ink: #0f172a;
+  --c-ink-dim: #334155;
+  --c-ink-faint: #64748b;
 
-  --color-accent: #4da3ff;
-  --color-accent-dim: #1e5a99;
+  /* Clustral green is the interactive colour. */
+  --c-accent: #16a34a;
+  --c-accent-strong: #15803d;
+  --c-accent-wash: rgba(34, 197, 94, 0.1);
 
-  --color-risk-0: #2b6cb0;
-  --color-risk-1: #4a9ecf;
-  --color-risk-2: #d9a441;
-  --color-risk-3: #e07b39;
-  --color-risk-4: #d94f3d;
-  --color-risk-5: #ff3b30;
+  /* Provenance encoding, tuned for contrast on white. */
+  --c-observed: #15803d;
+  --c-inferred: #a16207;
+  --c-predicted: #c2410c;
+  --c-recommended: #0f766e;
 
-  --color-observed: #4da3ff;
-  --color-inferred: #b98bff;
-  --color-predicted: #d9a441;
+  /*
+   * Risk ramp, drawn entirely from the logo's own gradient stops:
+   * green -> yellow -> orange. Saturation and weight increase with risk so a
+   * critical main is the heaviest thing on a white map and a healthy one
+   * recedes. Because this runs green-to-red, the numeric score and the band
+   * label are shown wherever the colour is — colour is never the only carrier.
+   */
+  --c-risk-0: #4ade80;
+  --c-risk-1: #22c55e;
+  --c-risk-2: #facc15;
+  --c-risk-3: #fb923c;
+  --c-risk-4: #ea580c;
+  --c-risk-5: #c2410c;
 
+  --c-map-bg: #ffffff;
+  --c-map-grid: rgba(15, 23, 42, 0.05);
+  --c-map-label: rgba(15, 23, 42, 0.46);
+  --c-map-select: #0f172a;
+  --c-break-ring: #c2410c;
+}
+
+:root[data-theme='dark'] {
+  --c-bg: #0b0f14;
+  --c-surface: #111820;
+  --c-raised: #17202a;
+  --c-line: #23303d;
+  --c-line-strong: #33434f;
+
+  --c-ink: #eef3f7;
+  --c-ink-dim: #a3b0bd;
+  --c-ink-faint: #6d7c8a;
+
+  --c-accent: #4ade80;
+  --c-accent-strong: #22c55e;
+  --c-accent-wash: rgba(74, 222, 128, 0.12);
+
+  --c-observed: #4ade80;
+  --c-inferred: #fcd34d;
+  --c-predicted: #fb923c;
+  --c-recommended: #5eead4;
+
+  /* Lifted for luminance against a dark ground; same brand hues. */
+  --c-risk-0: #15803d;
+  --c-risk-1: #22c55e;
+  --c-risk-2: #facc15;
+  --c-risk-3: #fb923c;
+  --c-risk-4: #f97316;
+  --c-risk-5: #ef4444;
+
+  --c-map-bg: #080b0f;
+  --c-map-grid: rgba(255, 255, 255, 0.045);
+  --c-map-label: rgba(238, 243, 247, 0.32);
+  --c-map-select: #ffffff;
+  --c-break-ring: #fb923c;
+}
+
+@theme inline {
+  --color-ground: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-raised: var(--c-raised);
+  --color-line: var(--c-line);
+  --color-line-bright: var(--c-line-strong);
+
+  --color-ink: var(--c-ink);
+  --color-ink-dim: var(--c-ink-dim);
+  --color-ink-faint: var(--c-ink-faint);
+
+  --color-accent: var(--c-accent);
+  --color-accent-dim: var(--c-accent-strong);
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
   --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
 }
 
 html,
 body {
-  background: var(--color-ground);
-  color: var(--color-ink);
+  background: var(--c-bg);
+  color: var(--c-ink);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
-/* Tabular figures everywhere numbers are compared down a column. */
+/* Repaint cleanly on theme change without animating every property. */
+body,
+aside,
+header,
+main,
+section {
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
+}
+
+/* Tabular figures wherever numbers are compared down a column. */
 .nums {
   font-variant-numeric: tabular-nums;
   font-family: var(--font-mono);
 }
 
-.hairline {
-  border-color: var(--color-line);
+.brandmark {
+  font-family: var(--font-serif);
+  letter-spacing: -0.01em;
 }
 
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--color-line-bright); border-radius: 5px; }
-::-webkit-scrollbar-thumb:hover { background: #3d4b5c; }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--c-line-strong);
+  border-radius: 5px;
+}
 
 @keyframes pulse-ring {
-  0% { opacity: 0.85; transform: scale(0.85); }
-  70% { opacity: 0; transform: scale(2.1); }
-  100% { opacity: 0; transform: scale(2.1); }
+  0% {
+    opacity: 0.8;
+    transform: scale(0.85);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(2.1);
+  }
 }
-.pulse-ring { animation: pulse-ring 2.4s cubic-bezier(0.2, 0.6, 0.4, 1) infinite; }
+.pulse-ring {
+  animation: pulse-ring 2.4s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+}
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
-.fade-up { animation: fade-up 0.35s ease-out both; }
+.fade-up {
+  animation: fade-up 0.35s ease-out both;
+}

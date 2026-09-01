@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { FAMILY_LABEL, PROVENANCE_COLOR, riskColor } from '@/lib/risk-color';
+import { FAMILY_LABEL, cssVar, provenanceColor, riskColor } from '@/lib/risk-color';
 
 type Frame = {
   day: number;
@@ -140,7 +140,7 @@ export default function Reconstruction({
   const atEnd = i >= data.frames.length - 1;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-ground/96 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex flex-col bg-ground/97 backdrop-blur-sm">
       <header className="flex items-center gap-4 border-b border-line px-6 py-3">
         <div>
           <h2 className="text-[15px] font-semibold">
@@ -217,8 +217,8 @@ export default function Reconstruction({
               const y = H - pad - (v / maxRisk) * (H - pad * 2);
               return (
                 <g key={v}>
-                  <line x1={pad} x2={W - pad} y1={y} y2={y} stroke="#1e2632" strokeWidth="1" />
-                  <text x={8} y={y + 3} fill="#5d6b7d" fontSize="9" className="nums">
+                  <line x1={pad} x2={W - pad} y1={y} y2={y} stroke={cssVar('--c-line')} strokeWidth="1" />
+                  <text x={8} y={y + 3} fill={cssVar('--c-ink-faint')} fontSize="9" className="nums">
                     {v}
                   </text>
                 </g>
@@ -231,7 +231,7 @@ export default function Reconstruction({
               x2={W - pad}
               y1={H - pad - (65 / maxRisk) * (H - pad * 2)}
               y2={H - pad - (65 / maxRisk) * (H - pad * 2)}
-              stroke="#d94f3d"
+              stroke={cssVar('--c-risk-4')}
               strokeWidth="1"
               strokeDasharray="4 3"
               opacity="0.65"
@@ -239,7 +239,7 @@ export default function Reconstruction({
             <text
               x={W - pad}
               y={H - pad - (65 / maxRisk) * (H - pad * 2) - 5}
-              fill="#d94f3d"
+              fill={cssVar('--c-risk-4')}
               fontSize="9"
               textAnchor="end"
             >
@@ -279,10 +279,10 @@ export default function Reconstruction({
                   x2={W - pad}
                   y1={pad - 12}
                   y2={H - pad}
-                  stroke="#ff3b30"
+                  stroke={cssVar('--c-risk-5')}
                   strokeWidth="1.5"
                 />
-                <text x={W - pad - 6} y={pad - 16} fill="#ff3b30" fontSize="10" textAnchor="end">
+                <text x={W - pad - 6} y={pad - 16} fill={cssVar('--c-risk-5')} fontSize="10" textAnchor="end">
                   FAILURE
                 </text>
               </g>
@@ -330,7 +330,7 @@ export default function Reconstruction({
               <div key={key} className="fade-up relative border-l border-line pl-3">
                 <span
                   className="absolute -left-[3px] top-1.5 h-[5px] w-[5px] rounded-full"
-                  style={{ background: PROVENANCE_COLOR[e.provenance] ?? '#4da3ff' }}
+                  style={{ background: provenanceColor(e.provenance) }}
                 />
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="text-[11px] font-medium">{e.label}</span>

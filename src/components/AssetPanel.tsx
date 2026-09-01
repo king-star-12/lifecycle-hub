@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 import Sparkline from './Sparkline';
 import Reconstruction from './Reconstruction';
 import type { AssetDetail, ExternalContext } from './types';
-import { FAMILY_LABEL, PROVENANCE_COLOR, riskColor, riskLabel } from '@/lib/risk-color';
+import { FAMILY_LABEL, cssVar, provenanceColor, riskColor, riskLabel } from '@/lib/risk-color';
 
-const TRAJECTORY: Record<string, { label: string; arrow: string; tone: string }> = {
-  rapidly_increasing: { label: 'Rising rapidly', arrow: '↑↑', tone: '#ff3b30' },
-  increasing: { label: 'Rising', arrow: '↑', tone: '#e07b39' },
-  stable: { label: 'Stable', arrow: '→', tone: '#97a3b4' },
-  decreasing: { label: 'Falling', arrow: '↓', tone: '#5ac8a8' },
+const TRAJECTORY: Record<string, { label: string; arrow: string; tone: () => string }> = {
+  rapidly_increasing: { label: 'Rising rapidly', arrow: '↑↑', tone: () => cssVar('--c-risk-5') },
+  increasing: { label: 'Rising', arrow: '↑', tone: () => cssVar('--c-risk-3') },
+  stable: { label: 'Stable', arrow: '→', tone: () => cssVar('--c-ink-faint') },
+  decreasing: { label: 'Falling', arrow: '↓', tone: () => cssVar('--c-risk-1') },
 };
 
 export default function AssetPanel({ assetId, onClose }: { assetId: string; onClose: () => void }) {
@@ -80,7 +80,7 @@ export default function AssetPanel({ assetId, onClose }: { assetId: string; onCl
         <div className="flex items-center gap-4">
           <div className="relative">
             <svg width="76" height="76" viewBox="0 0 76 76">
-              <circle cx="38" cy="38" r="32" fill="none" stroke="#1e2632" strokeWidth="6" />
+              <circle cx="38" cy="38" r="32" fill="none" stroke={cssVar('--c-line')} strokeWidth="6" />
               <circle
                 cx="38"
                 cy="38"
@@ -109,7 +109,7 @@ export default function AssetPanel({ assetId, onClose }: { assetId: string; onCl
               {riskLabel(score.risk)}
             </div>
             <Row label="Trajectory">
-              <span style={{ color: traj.tone }}>
+              <span style={{ color: traj.tone() }}>
                 {traj.arrow} {traj.label}
               </span>
             </Row>
@@ -142,9 +142,12 @@ export default function AssetPanel({ assetId, onClose }: { assetId: string; onCl
         )}
 
         {broke && (
-          <div className="mt-3 rounded-lg border border-[#ff3b30]/30 bg-[#ff3b30]/[0.08] px-3 py-2.5">
+          <div
+            className="mt-3 rounded-lg border px-3 py-2.5"
+            style={{ borderColor: `${cssVar('--c-risk-5')}55`, background: `${cssVar('--c-risk-5')}14` }}
+          >
             <div className="text-[11px]">
-              <span className="font-medium text-[#ff6b5e]">
+              <span className="font-medium" style={{ color: cssVar('--c-risk-5') }}>
                 This segment failed on {broke.date}.
               </span>{' '}
               <span className="text-ink-dim">
@@ -196,13 +199,13 @@ export default function AssetPanel({ assetId, onClose }: { assetId: string; onCl
                     className="h-full rounded-full"
                     style={{
                       width: `${Math.min(100, (f.contribution / 26) * 100)}%`,
-                      background: PROVENANCE_COLOR[f.provenance] ?? '#4da3ff',
+                      background: provenanceColor(f.provenance),
                     }}
                   />
                 </div>
                 <p className="mt-1 text-[10px] leading-relaxed text-ink-dim">{f.detail}</p>
                 <div className="mt-1 flex items-center gap-2">
-                  <Tag color={PROVENANCE_COLOR[f.provenance]}>{f.provenance}</Tag>
+                  <Tag color={provenanceColor(f.provenance)}>{f.provenance}</Tag>
                   <span className="text-[9px] text-ink-faint">{FAMILY_LABEL[f.family]}</span>
                 </div>
               </div>
@@ -218,13 +221,13 @@ export default function AssetPanel({ assetId, onClose }: { assetId: string; onCl
           <ul className="space-y-1 text-[10px]">
             {score.confidence_reasons.positive.map((r) => (
               <li key={r} className="flex gap-1.5 text-ink-dim">
-                <span className="text-[#5ac8a8]">✓</span>
+                <span style={{ color: cssVar('--c-risk-1') }}>✓</span>
                 {r}
               </li>
             ))}
             {score.confidence_reasons.negative.map((r) => (
               <li key={r} className="flex gap-1.5 text-ink-dim">
-                <span className="text-[#d9a441]">!</span>
+                <span style={{ color: cssVar('--c-risk-2') }}>!</span>
                 {r}
               </li>
             ))}
@@ -238,14 +241,14 @@ export default function AssetPanel({ assetId, onClose }: { assetId: string; onCl
               label="Pressure variability"
               unit="psi σ"
               values={series.pressure_std}
-              color="#4da3ff"
+              color={cssVar('--c-accent')}
             />
-            <Chart label="Flow" unit="gpm" values={series.flow_mean} color="#b98bff" />
+            <Chart label="Flow" unit="gpm" values={series.flow_mean} color={cssVar('--c-inferred')} />
             <Chart
               label="Soil moisture"
               unit="0-1"
               values={series.soil_moisture}
-              color="#5ac8a8"
+              color={cssVar('--c-recommended')}
             />
           </Section>
         ) : (
@@ -272,18 +275,19 @@ export default function AssetPanel({ assetId, onClose }: { assetId: string; onCl
                     <span
                       className="rounded px-1.5 py-[1px] text-[9px] uppercase"
                       style={{
-                        background:
+                        background: `${
                           f.severity === 'severe'
-                            ? '#ff3b3020'
+                            ? cssVar('--c-risk-5')
                             : f.severity === 'moderate'
-                              ? '#e07b3920'
-                              : '#4da3ff18',
+                              ? cssVar('--c-risk-3')
+                              : cssVar('--c-accent')
+                        }1f`,
                         color:
                           f.severity === 'severe'
-                            ? '#ff6b5e'
+                            ? cssVar('--c-risk-5')
                             : f.severity === 'moderate'
-                              ? '#e07b39'
-                              : '#4da3ff',
+                              ? cssVar('--c-risk-4')
+                              : cssVar('--c-accent-strong'),
                       }}
                     >
                       {f.severity}
@@ -302,14 +306,17 @@ export default function AssetPanel({ assetId, onClose }: { assetId: string; onCl
                   </div>
                   {f.evidence_source === 'nutrient_dws' && (
                     <div className="mt-1 flex items-center gap-1.5">
-                      <span className="rounded bg-[#5ac8a8]/15 px-1 py-[1px] text-[8px] uppercase tracking-wide text-[#5ac8a8]">
+                      <span
+                        className="rounded px-1 py-[1px] text-[8px] uppercase tracking-wide"
+                        style={{ background: `${cssVar('--c-accent')}20`, color: cssVar('--c-accent-strong') }}
+                      >
                         extracted from PDF
                       </span>
                       <span className="text-[9px] text-ink-faint">via Nutrient DWS</span>
                     </div>
                   )}
                   {f.no_active_leak && (
-                    <p className="mt-1 text-[9px] leading-relaxed text-amber-300/80">
+                    <p className="mt-1 text-[9px] leading-relaxed " style={{ color: cssVar('--c-inferred') }}>
                       Report records no active leak at the time of inspection. That is an
                       observation about one day, not a statement about condition.
                     </p>
@@ -361,8 +368,13 @@ export default function AssetPanel({ assetId, onClose }: { assetId: string; onCl
           )}
           {ext && (
             <>
-              <div className="rounded-md border border-amber-500/25 bg-amber-500/[0.06] px-2.5 py-2">
-                <p className="text-[10px] leading-relaxed text-amber-200/90">{ext.boundary}</p>
+              <div
+                className="rounded-md border px-2.5 py-2"
+                style={{ borderColor: `${cssVar('--c-risk-2')}66`, background: `${cssVar('--c-risk-2')}14` }}
+              >
+                <p className="text-[10px] leading-relaxed" style={{ color: cssVar('--c-inferred') }}>
+                  {ext.boundary}
+                </p>
               </div>
               <p className="mt-2 text-[10px] leading-relaxed text-ink-dim">{ext.detail}</p>
               <p className="mt-1 text-[10px] text-ink-faint">{ext.note}</p>

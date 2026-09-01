@@ -1,5 +1,5 @@
 {
-  "name": "clustral-water-intelligence",
+  "name": "clue-connected-lifecycle-utility-engine",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -33,5 +33,6 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "server-only": "^0.0.1"
-  }
+  },
+  "description": "CLUE \u2014 Connected Lifecycle Utility Engine. A Clustral AI product."
 }

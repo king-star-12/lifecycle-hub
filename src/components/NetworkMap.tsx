@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { MapFeature } from './types';
-import { riskColor } from '@/lib/risk-color';
+import { cssVar, riskColor } from '@/lib/risk-color';
+import { useTheme } from './useTheme';
 
 /**
  * The network map, rendered directly to a canvas.
@@ -72,6 +73,9 @@ export default function NetworkMap({ features, selectedId, onSelect, filter, foc
   const [hover, setHover] = useState<string | null>(null);
   const drag = useRef<{ x: number; y: number; lng: number; lat: number } | null>(null);
   const moved = useRef(false);
+  // The canvas paints with literal colours, so it has to be told when the
+  // theme changes; CSS custom properties alone cannot repaint a bitmap.
+  const [theme] = useTheme();
 
   // Track container size. Falls back to a usable default rather than rendering
   // nothing when the element reports zero -- a collapsed measurement should
@@ -143,12 +147,12 @@ export default function NetworkMap({ features, selectedId, onSelect, filter, foc
     if (!g) return;
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    g.fillStyle = '#080a0e';
+    g.fillStyle = cssVar('--c-map-bg');
     g.fillRect(0, 0, size.w, size.h);
 
     // Faint graticule for spatial reference.
     const step = view.zoom > 14 ? 0.005 : view.zoom > 12.5 ? 0.01 : 0.02;
-    g.strokeStyle = 'rgba(255,255,255,0.04)';
+    g.strokeStyle = cssVar('--c-map-grid');
     g.lineWidth = 1;
     const [wLng, nLat] = unproject(0, 0);
     const [eLng, sLat] = unproject(size.w, size.h);
@@ -168,7 +172,7 @@ export default function NetworkMap({ features, selectedId, onSelect, filter, foc
     }
 
     const widthFor = (dia: number) =>
-      Math.max(0.7, (0.6 + (dia / 36) * 2.6) * Math.max(0.4, 2 ** (view.zoom - 13.2)));
+      Math.max(0.9, (0.75 + (dia / 36) * 2.8) * Math.max(0.42, 2 ** (view.zoom - 13.2)));
 
     const ordered = [...visible].sort((a, b) => a.risk - b.risk);
     const onScreen: [MapFeature, number, number, number, number][] = [];
@@ -186,7 +190,7 @@ export default function NetworkMap({ features, selectedId, onSelect, filter, foc
     for (const [f, x1, y1, x2, y2] of onScreen) {
       if (f.risk < 55) continue;
       g.strokeStyle = riskColor(f.risk);
-      g.globalAlpha = 0.15;
+      g.globalAlpha = theme === 'dark' ? 0.15 : 0.1;
       g.lineWidth = widthFor(f.dia) * 5.5;
       g.beginPath();
       g.moveTo(x1, y1);
@@ -212,9 +216,9 @@ export default function NetworkMap({ features, selectedId, onSelect, filter, foc
       if (!f.brk) continue;
       g.beginPath();
       g.arc((x1 + x2) / 2, (y1 + y2) / 2, r, 0, Math.PI * 2);
-      g.fillStyle = '#0d1117';
+      g.fillStyle = cssVar('--c-map-bg');
       g.fill();
-      g.strokeStyle = '#ff6b5e';
+      g.strokeStyle = cssVar('--c-break-ring');
       g.lineWidth = 1.3;
       g.stroke();
     }
@@ -222,7 +226,7 @@ export default function NetworkMap({ features, selectedId, onSelect, filter, foc
     const sel = onScreen.find(([f]) => f.id === selectedId);
     if (sel) {
       const [f, x1, y1, x2, y2] = sel;
-      g.strokeStyle = '#ffffff';
+      g.strokeStyle = cssVar('--c-map-select');
       g.lineWidth = widthFor(f.dia) + 4;
       g.beginPath();
       g.moveTo(x1, y1);
@@ -238,13 +242,13 @@ export default function NetworkMap({ features, selectedId, onSelect, filter, foc
 
     g.font = '600 10px ui-sans-serif, system-ui, sans-serif';
     g.textAlign = 'center';
-    g.fillStyle = 'rgba(232,237,244,0.32)';
+    g.fillStyle = cssVar('--c-map-label');
     for (const [name, lat, lng] of NEIGHBORHOODS) {
       const [x, y] = project(lng, lat);
       if (x < 45 || x > size.w - 45 || y < 18 || y > size.h - 18) continue;
       g.fillText(name.toUpperCase(), x, y);
     }
-  }, [visible, size, view, selectedId, hover, project, unproject]);
+  }, [visible, size, view, selectedId, hover, project, unproject, theme]);
 
   const pick = useCallback(
     (mx: number, my: number): string | null => {

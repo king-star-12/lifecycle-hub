@@ -5,6 +5,7 @@ import NetworkMap from './NetworkMap';
 import AssetPanel from './AssetPanel';
 import type { MapFeature, MapPayload } from './types';
 import { riskColor, riskLabel } from '@/lib/risk-color';
+import { useTheme } from './useTheme';
 
 const MATERIALS = [
   ['cast_iron', 'Cast iron'],
@@ -23,6 +24,7 @@ export default function Console() {
   const [zone, setZone] = useState<string | null>(null);
   const [sensorOnly, setSensorOnly] = useState(false);
   const [focus, setFocus] = useState<{ lng: number; lat: number; zoom: number } | null>(null);
+  const [theme, setTheme] = useTheme();
 
   useEffect(() => {
     fetch('/api/map')
@@ -106,27 +108,51 @@ export default function Console() {
   return (
     <div className="flex h-screen flex-col overflow-hidden">
       {/* ---------------- header ---------------- */}
-      <header className="flex shrink-0 items-center gap-5 border-b border-line bg-surface px-5 py-2.5">
+      <header className="flex shrink-0 items-center gap-4 border-b border-line bg-surface px-4 py-2">
+        <a
+          href="https://clustralai.com"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="flex items-center gap-2.5 transition-opacity hover:opacity-80"
+          title="Clustral AI — the unified AI ecosystem"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/clustral-mark.png" alt="Clustral AI" className="h-7 w-7 rounded-[7px]" />
+          <span className="hidden text-[12px] text-ink-faint sm:inline">Clustral AI</span>
+        </a>
+
+        <span className="h-5 w-px bg-line" aria-hidden />
+
         <div className="flex items-baseline gap-2.5">
-          <span className="text-[15px] font-semibold tracking-tight">Clustral</span>
-          <span className="text-[11px] text-ink-faint">Water Main Failure Intelligence</span>
+          <span className="brandmark text-[17px] leading-none">CLUE</span>
+          <span className="hidden text-[11px] text-ink-faint md:inline">
+            Connected Lifecycle Utility Engine
+          </span>
         </div>
 
         <span
-          className="rounded border border-amber-500/35 bg-amber-500/10 px-2 py-[3px] text-[10px] font-medium tracking-wide text-amber-300"
+          className="rounded border border-[#facc15]/50 bg-[#facc15]/15 px-2 py-[3px] text-[10px] font-medium tracking-wide text-[#a16207]"
           title="Every pipe, sensor reading, failure and inspection report in this system is simulated. Street and zone names are real Pittsburgh references so that live external-context search returns genuine municipal information."
         >
           SYNTHETIC DATA
         </span>
 
-        <div className="ml-auto flex items-center gap-6 text-[11px] nums">
+        <div className="ml-auto flex items-center gap-5 text-[11px] nums">
           <Stat label="segments" value={data.features.length.toLocaleString()} />
-          <Stat label="elevated" value={String(elevated)} tone="#e07b39" />
-          <Stat label="high" value={String(high)} tone="#d94f3d" />
+          <Stat label="elevated" value={String(elevated)} tone={riskColor(52)} />
+          <Stat label="high" value={String(high)} tone={riskColor(70)} />
           <Stat label="as of" value={data.meta.as_of} />
           <a href="/metrics" className="text-accent transition-colors hover:underline">
             evaluation →
           </a>
+          <button
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="rounded-md border border-line px-2 py-1 text-ink-dim transition-colors hover:border-line-bright hover:text-ink"
+            title={theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
+            aria-label="Toggle colour theme"
+          >
+            {theme === 'dark' ? '☀' : '☾'}
+          </button>
         </div>
       </header>
 

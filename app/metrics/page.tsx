@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { readJson } from '@/lib/data/store';
+import BrandBar from '@/components/BrandBar';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,7 +30,7 @@ type Nutrient = {
 const MODEL_LABEL: Record<string, string> = {
   age_only: 'Pipe age',
   age_plus_history: 'Age + break history',
-  clustral: 'Clustral',
+  clustral: 'CLUE',
 };
 
 export default function MetricsPage() {
@@ -59,7 +60,9 @@ export default function MetricsPage() {
   const maxAuc = Math.max(...Object.values(bt.pr_auc));
 
   return (
-    <main className="mx-auto max-w-4xl px-6 py-10">
+    <>
+      <BrandBar />
+      <main className="mx-auto max-w-4xl px-6 py-10">
       <header className="mb-8 flex items-baseline justify-between gap-4 border-b border-line pb-4">
         <div>
           <h1 className="text-[19px] font-semibold tracking-tight">Evaluation</h1>
@@ -110,7 +113,7 @@ export default function MetricsPage() {
                   className="h-full rounded-full"
                   style={{
                     width: `${(auc / maxAuc) * 100}%`,
-                    background: model === 'clustral' ? '#4da3ff' : '#3d4a5c',
+                    background: model === 'clustral' ? 'var(--c-accent)' : 'var(--c-line-strong)',
                   }}
                 />
               </div>
@@ -147,7 +150,7 @@ export default function MetricsPage() {
                   </td>
                   {['10', '25', '50'].map((k) => (
                     <td key={k} className="py-2 pr-4 text-right">
-                      <span style={{ color: model === 'clustral' ? '#4da3ff' : undefined }}>
+                      <span style={{ color: model === 'clustral' ? 'var(--c-accent-strong)' : undefined }}>
                         {(ks[k].precision * 100).toFixed(1)}%
                       </span>
                       <span className="ml-2 text-[10px] text-ink-faint">
@@ -217,7 +220,7 @@ export default function MetricsPage() {
                     className="h-full rounded"
                     style={{
                       width: `${Math.min(100, (c.observed_rate ?? 0) * 140)}%`,
-                      background: '#4da3ff',
+                      background: 'var(--c-accent)',
                     }}
                   />
                 </div>
@@ -256,7 +259,8 @@ export default function MetricsPage() {
         synthetic network. These figures describe the engine&apos;s behaviour on simulated data and
         are not a claim about performance on any real distribution system.
       </footer>
-    </main>
+      </main>
+    </>
   );
 }
 

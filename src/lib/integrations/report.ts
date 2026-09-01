@@ -85,29 +85,33 @@ export function composeReportHtml(input: ReportInput, renderer: RenderTarget): s
   return `<!doctype html><html><head><meta charset="utf-8"><title>Pre-Failure Intelligence Report — ${esc(asset.asset_id)}</title>
 <style>
   @page { margin: 20mm 18mm; }
-  body { font-family: Georgia,'Times New Roman',serif; font-size: 10.5pt; line-height: 1.5; color: #14171c; }
+  body { font-family: Georgia,'Times New Roman',serif; font-size: 10.5pt; line-height: 1.5; color: #1e293b; }
   h1 { font-size: 17pt; margin: 0 0 2px; letter-spacing: -0.2px; }
-  h2 { font-size: 11pt; margin: 20px 0 6px; padding-bottom: 3px; border-bottom: 1px solid #c9cfd8;
+  .brand { margin-bottom: 10px; padding-bottom: 7px; border-bottom: 2px solid #16a34a; }
+  .brand-name { font-size: 13pt; font-weight: bold; letter-spacing: 0.02em; color: #15803d; }
+  .brand-sub { font-size: 8pt; color: #64748b; letter-spacing: 0.03em; }
+  h2 { font-size: 11pt; margin: 20px 0 6px; padding-bottom: 3px; border-bottom: 1px solid #e5e7eb;
        text-transform: uppercase; letter-spacing: 0.06em; }
-  .sub { color: #5b6572; font-size: 9pt; margin-bottom: 14px; }
-  .banner { border: 1.5px solid #b3541e; background: #fdf3e7; padding: 8px 11px; margin: 12px 0;
-            font-size: 9pt; color: #7a3a11; }
+  .sub { color: #64748b; font-size: 9pt; margin-bottom: 14px; }
+  .banner { border: 1px solid #facc15; background: #fefce8; padding: 8px 11px; margin: 12px 0;
+            font-size: 9pt; color: #854d0e; }
   .score { display: flex; gap: 26px; align-items: baseline; margin: 10px 0 4px; }
   .score .n { font-size: 34pt; font-weight: bold; line-height: 1; }
   .band { font-size: 12pt; font-weight: bold; letter-spacing: 0.05em; }
   table { border-collapse: collapse; width: 100%; margin: 6px 0; font-size: 9.5pt; }
-  th { text-align: left; width: 34%; color: #5b6572; font-weight: normal; padding: 3px 8px 3px 0;
+  th { text-align: left; width: 34%; color: #64748b; font-weight: normal; padding: 3px 8px 3px 0;
        vertical-align: top; }
   td { padding: 3px 0; vertical-align: top; }
   ol, ul { margin: 4px 0 4px 18px; padding: 0; }
   li { margin-bottom: 5px; }
   .factor { font-weight: bold; }
-  .detail { color: #3d4552; }
-  .prov { font-size: 8pt; color: #7a838f; text-transform: uppercase; letter-spacing: 0.05em; }
-  .foot { margin-top: 22px; padding-top: 8px; border-top: 1px solid #c9cfd8; font-size: 8pt; color: #6b7480; }
-  .approve { border: 1.5px solid #14171c; padding: 10px 12px; margin-top: 14px; font-size: 9.5pt; }
+  .detail { color: #334155; }
+  .prov { font-size: 8pt; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+  .foot { margin-top: 22px; padding-top: 8px; border-top: 1px solid #e5e7eb; font-size: 8pt; color: #64748b; }
+  .approve { border: 1.5px solid #0f172a; padding: 10px 12px; margin-top: 14px; font-size: 9.5pt; }
 </style></head><body>
 
+<div class="brand"><span class="brand-name">CLUE</span> <span class="brand-sub">Connected Lifecycle Utility Engine &middot; a Clustral AI product</span></div>
 <h1>Pre-Failure Intelligence Report</h1>
 <div class="sub">${esc(asset.asset_id)} &middot; ${esc(asset.street)}, ${esc(asset.neighborhood)} &middot; ${esc(input.utility)}</div>
 

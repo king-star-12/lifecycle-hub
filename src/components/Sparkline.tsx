@@ -1,5 +1,7 @@
 'use client';
 
+import { cssVar } from '@/lib/risk-color';
+
 type Props = {
   values: number[];
   /** Optional second series drawn faintly behind, for context. */
@@ -19,12 +21,14 @@ type Props = {
 export default function Sparkline({
   values,
   behind,
-  color = '#4da3ff',
-  behindColor = '#2c3745',
+  color: colorProp,
+  behindColor: behindProp,
   height = 44,
   marks = [],
   fill = true,
 }: Props) {
+  const color = colorProp ?? cssVar('--c-accent');
+  const behindColor = behindProp ?? cssVar('--c-line');
   const clean = values.filter(Number.isFinite);
   if (clean.length < 2) {
     return (

@@ -1,15 +1,19 @@
-# Clustral — Water Main Failure Intelligence
+<img src="public/brand/clustral-wordmark.png" alt="Clustral AI" width="260">
+
+# CLUE — Connected Lifecycle Utility Engine
+
+**Water main failure intelligence. A [Clustral AI](https://clustralai.com) product.**
 
 **What was the system trying to tell us before it broke?**
 
 Water mains rarely fail without warning. The warning is just fragmented — spread
 across telemetry, weather, inspection PDFs, work orders, customer complaints and
-public notices, none of which is decisive on its own. Clustral connects those
+public notices, none of which is decisive on its own. CLUE connects those
 fragments into a temporal evidence graph, detects when weak signals begin
 converging on one asset, explains why in language an operator can audit, and
 reconstructs what was knowable before a failure.
 
-> **Decision support — not an autonomous control system.** Clustral recommends
+> **Decision support — not an autonomous control system.** CLUE recommends
 > inspection. It does not authorise excavation and issues no operational control.
 
 ---
@@ -49,7 +53,7 @@ against the two prioritisation methods utilities actually use today.
 |---|---|---|---|---|
 | Pipe age | 0.0123 | 2.3× | 1.6% | 7.9% |
 | Age + break history | 0.0106 | 2.0× | 0.0% | 1.5% |
-| **Clustral** | **0.0901** | **16.7×** | **18.4%** | **37.4%** |
+| **CLUE** | **0.0901** | **16.7×** | **18.4%** | **37.4%** |
 
 **Median warning lead time: 130 days** (IQR 75–186). Only **29%** of failures
 cross the actionable band — the other 71% get no warning. Calibration is
@@ -92,6 +96,19 @@ cannot see why will not dig up a street.
 
 ---
 
+## Design language
+
+The interface uses the Clustral AI palette — the green, yellow and orange of the
+logo mark's node graph, slate text, and the `#e5e7eb` hairline from
+clustralai.com. Light is the default because that is the brand's default; a dark
+theme is one toggle away because control rooms are dim.
+
+The risk ramp is drawn entirely from the logo's own gradient stops, which means
+it runs green-to-red. That is a real accessibility cost — roughly 8% of men have
+a red-green deficiency — so colour is never the sole carrier: the numeric score
+and the band label (`MINIMAL` … `CRITICAL`) appear wherever the colour does, and
+stroke weight independently encodes diameter.
+
 ## Architecture
 
 ```
@@ -99,7 +116,7 @@ cannot see why will not dig up a street.
                                   │
               ┌───────────────────┼───────────────────┐
               ▼                   ▼                   ▼
-        Clustral risk       Xano backend        Live retrieval
+          CLUE risk         Xano backend        Live retrieval
            engine         (system of record)   SerpApi · Querit
               │                   │                   │
               ▼                   ▼                   ▼
