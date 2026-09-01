@@ -22,3 +22,5 @@ next-env.d.ts
 *.tsbuildinfo
 data/stage/
 .DS_Store
+.deploy/
+deploy.zip

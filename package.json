@@ -17,7 +17,8 @@
     "nutrient": "node scripts/nutrient-pipeline.ts",
     "xano:sync": "node scripts/xano-sync.ts",
     "azure:ingest": "node scripts/azure-ingest.ts",
-    "azure:twins": "node scripts/azure-twins.ts"
+    "azure:twins": "node scripts/azure-twins.ts",
+    "deploy": "./scripts/deploy-azure.sh"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",

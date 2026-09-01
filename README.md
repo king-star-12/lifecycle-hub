@@ -161,6 +161,19 @@ headers state which renderer ran and why. Swap the credential and it moves over.
 
 ---
 
+## Live
+
+**[lifecyclehub.clustralai.com](https://lifecyclehub.clustralai.com)** — Azure App
+Service (Linux, Node 22) in Central India, behind a free App Service managed
+certificate. DNS is Cloudflare; the record is DNS-only so Azure can validate the
+domain and renew the certificate.
+
+Deploy with `npm run deploy`. The large synthetic files are rebuilt from the seed
+at deploy time rather than committed, and the script hard-fails if the
+ground-truth file ends up in the package — Next's file tracing pulls the whole
+data directory in, and shipping the simulator's answer key to production would
+undermine the one property the evaluation rests on.
+
 ## Running it
 
 ```bash
