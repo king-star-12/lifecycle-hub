@@ -1,0 +1,9 @@
+node_modules/
+.next/
+.env.local
+data/synthetic/*.json
+data/synthetic/*.ndjson
+.cache/
+.next/
+next-env.d.ts
+*.tsbuildinfo

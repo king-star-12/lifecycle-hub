@@ -1,0 +1,32 @@
+{
+  "name": "clustral-water-intelligence",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "node scripts/generate.ts",
+    "backtest": "node scripts/backtest.ts",
+    "typecheck": "tsc --noEmit",
+    "validate": "node scripts/validate-simulation.ts",
+    "test:leakage": "node scripts/leakage-test.ts",
+    "precompute": "node scripts/precompute.ts",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "postcss": "^8.5.26",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.0"
+  },
+  "dependencies": {
+    "next": "^16.3.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "server-only": "^0.0.1"
+  }
+}

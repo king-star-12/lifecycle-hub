@@ -1,0 +1,76 @@
+@import 'tailwindcss';
+
+/*
+ * Clustral operator console.
+ *
+ * The palette is built for a control room: near-black ground so that risk
+ * colour is the only thing that draws the eye, and a single accent used
+ * exclusively for interactive affordances. Risk colours are deliberately not
+ * a red-green ramp -- roughly 8% of men have a red-green colour vision
+ * deficiency, and this is a safety tool. The ramp runs blue -> amber -> red
+ * with monotonically increasing lightness contrast, so it stays readable when
+ * hue information is lost.
+ */
+
+@theme {
+  --color-ground: #07090d;
+  --color-surface: #0d1117;
+  --color-raised: #141a23;
+  --color-line: #1e2632;
+  --color-line-bright: #2c3745;
+
+  --color-ink: #e8edf4;
+  --color-ink-dim: #97a3b4;
+  --color-ink-faint: #5d6b7d;
+
+  --color-accent: #4da3ff;
+  --color-accent-dim: #1e5a99;
+
+  --color-risk-0: #2b6cb0;
+  --color-risk-1: #4a9ecf;
+  --color-risk-2: #d9a441;
+  --color-risk-3: #e07b39;
+  --color-risk-4: #d94f3d;
+  --color-risk-5: #ff3b30;
+
+  --color-observed: #4da3ff;
+  --color-inferred: #b98bff;
+  --color-predicted: #d9a441;
+
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+}
+
+html,
+body {
+  background: var(--color-ground);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tabular figures everywhere numbers are compared down a column. */
+.nums {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+}
+
+.hairline {
+  border-color: var(--color-line);
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-line-bright); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: #3d4b5c; }
+
+@keyframes pulse-ring {
+  0% { opacity: 0.85; transform: scale(0.85); }
+  70% { opacity: 0; transform: scale(2.1); }
+  100% { opacity: 0; transform: scale(2.1); }
+}
+.pulse-ring { animation: pulse-ring 2.4s cubic-bezier(0.2, 0.6, 0.4, 1) infinite; }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.fade-up { animation: fade-up 0.35s ease-out both; }
