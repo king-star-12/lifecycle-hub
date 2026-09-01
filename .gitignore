@@ -7,3 +7,4 @@ data/synthetic/*.ndjson
 .next/
 next-env.d.ts
 *.tsbuildinfo
+data/stage/

@@ -15,7 +15,8 @@
     "start": "next start",
     "xano:provision": "node scripts/xano-provision.ts",
     "nutrient": "node scripts/nutrient-pipeline.ts",
-    "xano:sync": "node scripts/xano-sync.ts"
+    "xano:sync": "node scripts/xano-sync.ts",
+    "azure:ingest": "node scripts/azure-ingest.ts"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",

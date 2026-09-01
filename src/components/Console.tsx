@@ -124,6 +124,9 @@ export default function Console() {
           <Stat label="elevated" value={String(elevated)} tone="#e07b39" />
           <Stat label="high" value={String(high)} tone="#d94f3d" />
           <Stat label="as of" value={data.meta.as_of} />
+          <a href="/metrics" className="text-accent transition-colors hover:underline">
+            evaluation →
+          </a>
         </div>
       </header>
 
