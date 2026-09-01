@@ -167,7 +167,11 @@ recent
 | join kind=inner baseline on AssetId
 | extend Lift = RecentStd / BaseStd
 | join kind=inner (Assets | project AssetId, Street, Neighborhood, Material, InstallYear) on AssetId
-| where Lift > 1.2
+// Ranked rather than thresholded. A fixed cutoff bakes in an assumption about
+// how much divergence exists on any given day -- on this date the network's
+// maximum lift is about 1.18, so a 1.2 filter would silently return nothing and
+// read as "all clear". Ranking always answers the question actually being asked:
+// which segments are diverging most from their zone right now.
 | project AssetId, Street, Neighborhood, Material, InstallYear, Lift = round(Lift, 3)
 | top 8 by Lift desc`;
 for (const r of rows(await kusto('query', analytic))) {

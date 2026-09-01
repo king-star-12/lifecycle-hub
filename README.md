@@ -119,12 +119,22 @@ be the wrong architecture wearing the right logo.
 
 | Service | Role | State |
 |---|---|---|
-| **Azure** | ADX time-series + KQL, Digital Twins graph, Blob, gpt-5-mini | Live |
+| **Azure** | ADX: 414,275 telemetry rows + KQL. Blob staging. gpt-5-mini. | Live |
+| **Azure Digital Twins** | Asset relationship graph (DTDL models written) | Needs a data-plane role grant — see below |
 | **Xano** | Backend of record: 7 tables provisioned as code, 120 assets synced | Live |
 | **SerpApi** | Live corridor context — breaks, construction, municipal notices | Live |
 | **Querit** | Durable failure-mechanism research | Live |
 | **Nutrient DWS** | Inspection PDF → structured evidence, accuracy measured | Live |
 | **Doctavian** | Intended report renderer | Credential rejected — see below |
+
+**Azure Digital Twins**: the instance is provisioned and `npm run azure:twins`
+builds the full graph, but Digital Twins data-plane access is a separate RBAC
+role that subscription ownership does not confer. Grant it once:
+
+```bash
+az dt role-assignment create --dt-name clustral-water-twins -g clustral-rg \
+  --assignee infra@clustralai.com --role "Azure Digital Twins Data Owner"
+```
 
 **Doctavian**: its generate endpoint requires a pre-uploaded DOCX template and
 two encrypted AES JWTs; the supplied key returns `ApiKeyNotFound` on every
