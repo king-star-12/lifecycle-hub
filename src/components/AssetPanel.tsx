@@ -442,6 +442,22 @@ export default function AssetPanel({ assetId, onClose }: { assetId: string; onCl
           </Section>
         )}
 
+        <Section title="Report">
+          <p className="text-[10px] leading-relaxed text-ink-dim">
+            Produces the Pre-Failure Intelligence Report as a PDF: the decomposed score, the
+            evidence behind it, confidence and known gaps, the recommended action, and a signature
+            block. It proposes an inspection and authorises nothing.
+          </p>
+          <a
+            href={`/api/asset/${assetId}/report`}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="mt-2 block w-full rounded-md bg-accent/90 px-3 py-2 text-center text-[11px] font-medium text-ground transition-colors hover:bg-accent"
+          >
+            Generate intelligence report (PDF)
+          </a>
+        </Section>
+
         <p className="mt-5 border-t border-line pt-3 text-[9px] leading-relaxed text-ink-faint">
           Decision support, not an autonomous control system. Every figure above derives from
           simulated telemetry and documents; no operational control is issued by this tool.

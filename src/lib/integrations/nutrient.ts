@@ -115,7 +115,10 @@ export function parseFinding(text: string): ParsedFinding {
     material: grab(/\b(cast iron|ductile iron|asbestos cement|steel|pvc|hdpe)\b/i)?.toLowerCase().replace(/\s+/g, '_') ?? null,
     install_year: Number(grab(/originally installed in\s*(\d{4})/i)) || null,
     diameter_in: Number(grab(/(\d+)-inch/i)) || null,
-    evidence_sentence: observations ? observations.split('\n')[0] : null,
+    // The observation paragraph is hard-wrapped in the PDF, so the extracted
+    // text carries newlines mid-sentence. Rejoin before storing, or the
+    // evidence gets quoted truncated in reports.
+    evidence_sentence: observations ? observations.replace(/\s*\n\s*/g, ' ').trim() : null,
     no_active_leak: /No active leak (was )?(detected|observed)/i.test(flat),
   };
 }
