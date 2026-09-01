@@ -1,0 +1,173 @@
+{
+  "generated_at": "2026-09-01T02:24:24.204Z",
+  "provider": "Nutrient DWS Processor API",
+  "operations": [
+    "html->pdf (build)",
+    "pdf->json-content (build)"
+  ],
+  "documents": 14,
+  "accuracy": {
+    "asset_id": 100,
+    "inspection_date": 100,
+    "severity": 100,
+    "material": 100,
+    "install_year": 100
+  },
+  "total_pdf_bytes": 269698,
+  "rows": [
+    {
+      "filename": "inspection_WM-2162_20221001.pdf",
+      "asset_id_ok": true,
+      "date_ok": true,
+      "severity_ok": true,
+      "material_ok": true,
+      "year_ok": true,
+      "no_leak_flag": true,
+      "pdf_bytes": 19357,
+      "chars": 1482
+    },
+    {
+      "filename": "inspection_WM-1281_20221112.pdf",
+      "asset_id_ok": true,
+      "date_ok": true,
+      "severity_ok": true,
+      "material_ok": true,
+      "year_ok": true,
+      "no_leak_flag": true,
+      "pdf_bytes": 19428,
+      "chars": 1478
+    },
+    {
+      "filename": "inspection_WM-1192_20221231.pdf",
+      "asset_id_ok": true,
+      "date_ok": true,
+      "severity_ok": true,
+      "material_ok": true,
+      "year_ok": true,
+      "no_leak_flag": true,
+      "pdf_bytes": 19310,
+      "chars": 1446
+    },
+    {
+      "filename": "inspection_WM-2250_20230112.pdf",
+      "asset_id_ok": true,
+      "date_ok": true,
+      "severity_ok": true,
+      "material_ok": true,
+      "year_ok": true,
+      "no_leak_flag": true,
+      "pdf_bytes": 19391,
+      "chars": 1491
+    },
+    {
+      "filename": "inspection_WM-2881_20230305.pdf",
+      "asset_id_ok": true,
+      "date_ok": true,
+      "severity_ok": true,
+      "material_ok": true,
+      "year_ok": true,
+      "no_leak_flag": true,
+      "pdf_bytes": 19189,
+      "chars": 1375
+    },
+    {
+      "filename": "inspection_WM-1011_20230820.pdf",
+      "asset_id_ok": true,
+      "date_ok": true,
+      "severity_ok": true,
+      "material_ok": true,
+      "year_ok": true,
+      "no_leak_flag": true,
+      "pdf_bytes": 19526,
+      "chars": 1476
+    },
+    {
+      "filename": "inspection_WM-1600_20240123.pdf",
+      "asset_id_ok": true,
+      "date_ok": true,
+      "severity_ok": true,
+      "material_ok": true,
+      "year_ok": true,
+      "no_leak_flag": true,
+      "pdf_bytes": 18953,
+      "chars": 1359
+    },
+    {
+      "filename": "inspection_WM-2162_20240428.pdf",
+      "asset_id_ok": true,
+      "date_ok": true,
+      "severity_ok": true,
+      "material_ok": true,
+      "year_ok": true,
+      "no_leak_flag": true,
+      "pdf_bytes": 19521,
+      "chars": 1489
+    },
+    {
+      "filename": "inspection_WM-1514_20241116.pdf",
+      "asset_id_ok": true,
+      "date_ok": true,
+      "severity_ok": true,
+      "material_ok": true,
+      "year_ok": true,
+      "no_leak_flag": true,
+      "pdf_bytes": 19459,
+      "chars": 1469
+    },
+    {
+      "filename": "inspection_WM-1700_20250203.pdf",
+      "asset_id_ok": true,
+      "date_ok": true,
+      "severity_ok": true,
+      "material_ok": true,
+      "year_ok": true,
+      "no_leak_flag": true,
+      "pdf_bytes": 19011,
+      "chars": 1349
+    },
+    {
+      "filename": "inspection_WM-1378_20250224.pdf",
+      "asset_id_ok": true,
+      "date_ok": true,
+      "severity_ok": true,
+      "material_ok": true,
+      "year_ok": true,
+      "no_leak_flag": true,
+      "pdf_bytes": 19558,
+      "chars": 1455
+    },
+    {
+      "filename": "inspection_WM-1398_20250719.pdf",
+      "asset_id_ok": true,
+      "date_ok": true,
+      "severity_ok": true,
+      "material_ok": true,
+      "year_ok": true,
+      "no_leak_flag": true,
+      "pdf_bytes": 19148,
+      "chars": 1431
+    },
+    {
+      "filename": "inspection_WM-1604_20251130.pdf",
+      "asset_id_ok": true,
+      "date_ok": true,
+      "severity_ok": true,
+      "material_ok": true,
+      "year_ok": true,
+      "no_leak_flag": true,
+      "pdf_bytes": 19049,
+      "chars": 1414
+    },
+    {
+      "filename": "inspection_WM-2124_20260126.pdf",
+      "asset_id_ok": true,
+      "date_ok": true,
+      "severity_ok": true,
+      "material_ok": true,
+      "year_ok": true,
+      "no_leak_flag": true,
+      "pdf_bytes": 18798,
+      "chars": 1361
+    }
+  ]
+}
