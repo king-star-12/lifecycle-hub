@@ -99,3 +99,23 @@ export type AssetDetail = {
   neighbor_count: number;
   zone: { zone_id: string; name: string; nominal_psi: number; pump_station: string; reservoir: string } | null;
 };
+
+export type ExternalContext = {
+  items: {
+    title: string;
+    url: string;
+    snippet: string;
+    source: string;
+    published?: string | null;
+    query: string;
+    signal: string;
+  }[];
+  queries: string[];
+  retrieved_at: string;
+  live: boolean;
+  configured: boolean;
+  strength: number;
+  detail: string;
+  note: string;
+  boundary: string;
+};

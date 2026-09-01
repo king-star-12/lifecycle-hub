@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Sparkline from './Sparkline';
 import Reconstruction from './Reconstruction';
-import type { AssetDetail } from './types';
+import type { AssetDetail, ExternalContext } from './types';
 import { FAMILY_LABEL, PROVENANCE_COLOR, riskColor, riskLabel } from '@/lib/risk-color';
 
 const TRAJECTORY: Record<string, { label: string; arrow: string; tone: string }> = {
@@ -18,11 +18,14 @@ export default function AssetPanel({ assetId, onClose }: { assetId: string; onCl
   const [loading, setLoading] = useState(true);
   const [reconstructing, setReconstructing] = useState(false);
   const [openDoc, setOpenDoc] = useState<string | null>(null);
+  const [ext, setExt] = useState<ExternalContext | null>(null);
+  const [extLoading, setExtLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     setD(null);
     setOpenDoc(null);
+    setExt(null);
     fetch(`/api/asset/${assetId}`)
       .then((r) => r.json())
       .then((json) => setD(json.error ? null : json))
@@ -315,6 +318,68 @@ export default function AssetPanel({ assetId, onClose }: { assetId: string; onCl
             })}
           </Section>
         )}
+
+        {/* external context */}
+        <Section title="External context · live web">
+          {!ext && !extLoading && (
+            <>
+              <p className="text-[10px] leading-relaxed text-ink-dim">
+                Searches the public web for reported breaks, construction and municipal notices in
+                this corridor. Run on demand — it costs quota, and is only worth spending on an
+                asset someone is actually looking at.
+              </p>
+              <button
+                onClick={() => {
+                  setExtLoading(true);
+                  fetch(`/api/asset/${assetId}/context`)
+                    .then((r) => r.json())
+                    .then((j) => setExt(j.error ? null : j))
+                    .finally(() => setExtLoading(false));
+                }}
+                className="mt-2 w-full rounded-md border border-line bg-raised px-3 py-1.5 text-[11px] font-medium transition-colors hover:border-line-bright"
+              >
+                Retrieve external context
+              </button>
+            </>
+          )}
+          {extLoading && (
+            <p className="text-[10px] text-ink-faint">Searching public sources…</p>
+          )}
+          {ext && (
+            <>
+              <div className="rounded-md border border-amber-500/25 bg-amber-500/[0.06] px-2.5 py-2">
+                <p className="text-[10px] leading-relaxed text-amber-200/90">{ext.boundary}</p>
+              </div>
+              <p className="mt-2 text-[10px] leading-relaxed text-ink-dim">{ext.detail}</p>
+              <p className="mt-1 text-[10px] text-ink-faint">{ext.note}</p>
+              <div className="mt-2 space-y-1.5">
+                {ext.items.slice(0, 6).map((i) => (
+                  <a
+                    key={i.url}
+                    href={i.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="block rounded border border-line bg-raised px-2 py-1.5 transition-colors hover:border-line-bright"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="text-[10px] leading-snug text-ink">{i.title}</span>
+                      <span className="shrink-0 rounded px-1 py-[1px] text-[8px] uppercase tracking-wide text-ink-faint ring-1 ring-line">
+                        {i.signal.replace(/_/g, ' ')}
+                      </span>
+                    </div>
+                    <span className="mt-0.5 block truncate text-[9px] text-ink-faint">
+                      {i.source} · {new URL(i.url).hostname}
+                    </span>
+                  </a>
+                ))}
+              </div>
+              <p className="mt-2 text-[9px] text-ink-faint">
+                Retrieved {new Date(ext.retrieved_at).toISOString().slice(0, 16).replace('T', ' ')} ·
+                cached 7 days · capped at {(0.75 * 6).toFixed(0)} of 100 points
+              </p>
+            </>
+          )}
+        </Section>
 
         {/* spatial */}
         <Section title="Spatial context">

@@ -12,7 +12,8 @@
     "precompute": "node scripts/precompute.ts",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "xano:provision": "node scripts/xano-provision.ts"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
