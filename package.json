@@ -1,5 +1,5 @@
 {
-  "name": "clue-connected-lifecycle-utility-engine",
+  "name": "lifecycle-hub",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -34,5 +34,5 @@
     "react-dom": "^19.2.8",
     "server-only": "^0.0.1"
   },
-  "description": "CLUE \u2014 Connected Lifecycle Utility Engine. A Clustral AI product."
+  "description": "Lifecycle Hub \u2014 water main failure intelligence. A Clustral AI product."
 }

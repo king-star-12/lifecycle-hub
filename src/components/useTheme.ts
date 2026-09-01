@@ -23,7 +23,7 @@ export function useTheme(): [Theme, (t: Theme) => void] {
   const setTheme = (t: Theme) => {
     document.documentElement.dataset.theme = t;
     try {
-      localStorage.setItem('clue-theme', t);
+      localStorage.setItem('lifecycle-hub-theme', t);
     } catch {
       // private browsing: the choice simply will not persist
     }

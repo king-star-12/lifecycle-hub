@@ -11,9 +11,9 @@ const serif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: 'CLUE — Connected Lifecycle Utility Engine | Clustral AI',
+  title: 'Lifecycle Hub — Water Main Failure Intelligence | Clustral AI',
   description:
-    'A Clustral AI product. CLUE reconstructs what a water distribution system was signalling before a main failed, connecting telemetry, environment, spatial context, inspection documents and live external signals into one explainable evidence trail.',
+    'A Clustral AI product. Lifecycle Hub reconstructs what a water distribution system was signalling before a main failed, connecting telemetry, environment, spatial context, inspection documents and live external signals into one explainable evidence trail.',
   icons: { icon: '/brand/clustral-mark.png' },
 };
 
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
  * stored preference, falling back to the operating system setting.
  */
 const THEME_INIT = `(function(){try{
-  var t = localStorage.getItem('clue-theme');
+  var t = localStorage.getItem('lifecycle-hub-theme');
   if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   document.documentElement.dataset.theme = t;
 }catch(e){document.documentElement.dataset.theme='light';}})();`;

@@ -30,7 +30,7 @@ type Nutrient = {
 const MODEL_LABEL: Record<string, string> = {
   age_only: 'Pipe age',
   age_plus_history: 'Age + break history',
-  clustral: 'CLUE',
+  clustral: 'Lifecycle Hub',
 };
 
 export default function MetricsPage() {

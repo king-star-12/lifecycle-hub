@@ -111,7 +111,7 @@ export function composeReportHtml(input: ReportInput, renderer: RenderTarget): s
   .approve { border: 1.5px solid #0f172a; padding: 10px 12px; margin-top: 14px; font-size: 9.5pt; }
 </style></head><body>
 
-<div class="brand"><span class="brand-name">CLUE</span> <span class="brand-sub">Connected Lifecycle Utility Engine &middot; a Clustral AI product</span></div>
+<div class="brand"><span class="brand-name">Lifecycle Hub</span> <span class="brand-sub">a Clustral AI product</span></div>
 <h1>Pre-Failure Intelligence Report</h1>
 <div class="sub">${esc(asset.asset_id)} &middot; ${esc(asset.street)}, ${esc(asset.neighborhood)} &middot; ${esc(input.utility)}</div>
 

@@ -1,6 +1,6 @@
 <img src="public/brand/clustral-wordmark.png" alt="Clustral AI" width="260">
 
-# CLUE — Connected Lifecycle Utility Engine
+# Lifecycle Hub
 
 **Water main failure intelligence. A [Clustral AI](https://clustralai.com) product.**
 
@@ -8,12 +8,12 @@
 
 Water mains rarely fail without warning. The warning is just fragmented — spread
 across telemetry, weather, inspection PDFs, work orders, customer complaints and
-public notices, none of which is decisive on its own. CLUE connects those
+public notices, none of which is decisive on its own. Lifecycle Hub connects those
 fragments into a temporal evidence graph, detects when weak signals begin
 converging on one asset, explains why in language an operator can audit, and
 reconstructs what was knowable before a failure.
 
-> **Decision support — not an autonomous control system.** CLUE recommends
+> **Decision support — not an autonomous control system.** Lifecycle Hub recommends
 > inspection. It does not authorise excavation and issues no operational control.
 
 ---
@@ -53,7 +53,7 @@ against the two prioritisation methods utilities actually use today.
 |---|---|---|---|---|
 | Pipe age | 0.0123 | 2.3× | 1.6% | 7.9% |
 | Age + break history | 0.0106 | 2.0× | 0.0% | 1.5% |
-| **CLUE** | **0.0901** | **16.7×** | **18.4%** | **37.4%** |
+| **Lifecycle Hub** | **0.0901** | **16.7×** | **18.4%** | **37.4%** |
 
 **Median warning lead time: 130 days** (IQR 75–186). Only **29%** of failures
 cross the actionable band — the other 71% get no warning. Calibration is
@@ -116,7 +116,7 @@ stroke weight independently encodes diameter.
                                   │
               ┌───────────────────┼───────────────────┐
               ▼                   ▼                   ▼
-          CLUE risk         Xano backend        Live retrieval
+      Lifecycle Hub risk     Xano backend        Live retrieval
            engine         (system of record)   SerpApi · Querit
               │                   │                   │
               ▼                   ▼                   ▼

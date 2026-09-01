@@ -24,9 +24,9 @@ export default function BrandBar() {
       </a>
       <span className="h-5 w-px bg-line" aria-hidden />
       <div className="flex items-baseline gap-2.5">
-        <span className="brandmark text-[17px] leading-none">CLUE</span>
+        <span className="brandmark text-[18px] leading-none">Lifecycle Hub</span>
         <span className="hidden text-[11px] text-ink-faint md:inline">
-          Connected Lifecycle Utility Engine
+          Water main failure intelligence
         </span>
       </div>
       <button

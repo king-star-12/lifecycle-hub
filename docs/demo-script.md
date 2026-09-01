@@ -1,6 +1,6 @@
 # Three-minute demo
 
-**CLUE — Connected Lifecycle Utility Engine**, a Clustral AI product.
+**Lifecycle Hub**, a Clustral AI product.
 
 One story, told once, with nothing improvised. Rehearse against the exact URLs
 below — every one is deep-linkable, so nothing depends on finding a pipe on a map
@@ -114,7 +114,7 @@ Back to the asset panel → **Generate intelligence report**.
 
 ## 2:50–3:00 · Close
 
-> "CLUE isn't predicting the future from one signal. It's noticing when the
+> "Lifecycle Hub isn't predicting the future from one signal. It's noticing when the
 > system has already started telling us something — and showing its work."
 
 ---
