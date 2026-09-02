@@ -124,7 +124,7 @@ export default function Reconstruction({
   }
 
   const W = 900;
-  const H = 240;
+  const H = 460;
   const pad = 34;
   const maxRisk = Math.max(60, ...data.frames.map((f) => f.risk));
   const pt = (f: Frame, idx: number) => {
@@ -235,7 +235,12 @@ export default function Reconstruction({
             </div>
           </div>
 
-          <svg viewBox={`0 0 ${W} ${H}`} className="mt-5 w-full" style={{ maxHeight: 260 }}>
+          <div className="mt-5 min-h-0 flex-1">
+            <svg
+              viewBox={`0 0 ${W} ${H}`}
+              className="h-full w-full"
+              preserveAspectRatio="xMidYMid meet"
+            >
             <defs>
               <linearGradient id="rc-fill" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor={riskColor(frame.risk)} stopOpacity="0.3" />
@@ -317,7 +322,8 @@ export default function Reconstruction({
                 </text>
               </g>
             )}
-          </svg>
+            </svg>
+          </div>
 
           <input
             type="range"
