@@ -73,33 +73,65 @@ export async function insert(
   });
 }
 
-/** Insert with bounded concurrency; the Metadata API is per-row. */
+/**
+ * Insert with bounded concurrency and retry; the Metadata API is per-row.
+ *
+ * Rows are retried with backoff because the failures seen here are transient --
+ * the API rate-limits under concurrency, and the same row inserts cleanly on a
+ * second attempt. The earlier version swallowed those rejections entirely and
+ * reported a short count, which is the worst possible behaviour for a system of
+ * record: the sync looked like it worked and the audit trail was quietly
+ * incomplete. Permanent failures are now returned to the caller so the sync can
+ * say so out loud.
+ */
 export async function insertMany(
   cfg: XanoConfig,
   tableId: number,
   rows: Record<string, unknown>[],
   concurrency = 6,
-): Promise<number> {
-  let done = 0;
+): Promise<{ inserted: number; failed: { row: Record<string, unknown>; error: string }[] }> {
+  let inserted = 0;
   let cursor = 0;
+  const failed: { row: Record<string, unknown>; error: string }[] = [];
+
   const workers = Array.from({ length: Math.min(concurrency, rows.length) }, async () => {
     while (cursor < rows.length) {
       const row = rows[cursor++];
-      try {
-        await insert(cfg, tableId, row);
-        done++;
-      } catch {
-        // A single rejected row must not abandon the sync.
+      let lastError = '';
+      for (let attempt = 0; attempt < 4; attempt++) {
+        try {
+          await insert(cfg, tableId, row);
+          inserted++;
+          lastError = '';
+          break;
+        } catch (err) {
+          lastError = err instanceof Error ? err.message : String(err);
+          // Exponential backoff with jitter, so retries do not resynchronise
+          // into the same burst that caused the rejection.
+          await new Promise((r) => setTimeout(r, 250 * 2 ** attempt + Math.random() * 200));
+        }
       }
+      if (lastError) failed.push({ row, error: lastError });
     }
   });
+
   await Promise.all(workers);
-  return done;
+  return { inserted, failed };
 }
 
-/** Remove every row from a table, so a sync is a replace rather than an append. */
+/**
+ * Remove every row from a table, so a sync is a replace rather than an append.
+ *
+ * `reset` is required by the API and controls whether the primary key sequence
+ * restarts; without it the call 400s. This used to swallow its own failure,
+ * which meant every sync silently appended a fresh copy of the assessment on
+ * top of the last one -- exactly the corruption a system of record must not
+ * have. It now throws, because a failed clear has to stop the sync rather than
+ * quietly double the data.
+ */
 export async function truncate(cfg: XanoConfig, tableId: number): Promise<void> {
-  await xano(cfg, `/workspace/${cfg.workspace}/table/${tableId}/truncate`, { method: 'DELETE' }).catch(
-    () => undefined,
-  );
+  await xano(cfg, `/workspace/${cfg.workspace}/table/${tableId}/truncate`, {
+    method: 'DELETE',
+    body: JSON.stringify({ reset: true }),
+  });
 }

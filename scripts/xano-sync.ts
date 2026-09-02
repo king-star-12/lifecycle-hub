@@ -46,6 +46,22 @@ const selected = scores
 
 console.log(`syncing ${selected.length} assets as of ${asOfDate}\n`);
 const ids = await tableIds(cfg);
+let anyFailed = false;
+const push = async (
+  label: string,
+  tableId: number,
+  rows: Record<string, unknown>[],
+  concurrency = 10,
+) => {
+  const { inserted, failed } = await insertMany(cfg!, tableId, rows, concurrency);
+  const ok = inserted === rows.length;
+  if (!ok) anyFailed = true;
+  console.log(
+    `  ${label.padEnd(16)} ${inserted} / ${rows.length}${ok ? '' : `  \x1b[31m${failed.length} failed after retries\x1b[0m`}`,
+  );
+  for (const f of failed.slice(0, 3)) console.log(`      ${f.error.slice(0, 120)}`);
+};
+
 const T = (name: string) => {
   const id = ids.get(name);
   if (id === undefined) throw new Error(`Table ${name} missing — run npm run xano:provision`);
@@ -68,7 +84,7 @@ const assetRows = selected.map((s) => {
     road_class: a.road_class, lat: a.centroid.lat, lng: a.centroid.lng,
   };
 });
-console.log(`  assets           ${await insertMany(cfg, T('assets'), assetRows, 10)} / ${assetRows.length}`);
+await push('assets', T('assets'), assetRows, 10);
 
 // --- snapshots + decomposition ----------------------------------------------
 const snapshotRows = selected.map((s) => ({
@@ -77,7 +93,7 @@ const snapshotRows = selected.map((s) => ({
   convergence_bonus: s.convergence.bonus, engine_version: ENGINE_VERSION,
   data_class: bundle.meta.data_class,
 }));
-console.log(`  risk_snapshots   ${await insertMany(cfg, T('risk_snapshots'), snapshotRows, 10)} / ${snapshotRows.length}`);
+await push('risk_snapshots', T('risk_snapshots'), snapshotRows, 10);
 
 const factorRows = selected.flatMap((s) =>
   s.factors.map((f) => ({
@@ -86,7 +102,7 @@ const factorRows = selected.flatMap((s) =>
     detail: f.detail,
   })),
 );
-console.log(`  risk_factors     ${await insertMany(cfg, T('risk_factors'), factorRows, 10)} / ${factorRows.length}`);
+await push('risk_factors', T('risk_factors'), factorRows, 10);
 
 // --- evidence ---------------------------------------------------------------
 const selectedIds = new Set(selected.map((s) => s.asset_id));
@@ -110,7 +126,7 @@ const evidenceRows = [
       excerpt: '', provenance: 'observed', corroborated: true,
     })),
 ];
-console.log(`  evidence         ${await insertMany(cfg, T('evidence'), evidenceRows, 10)} / ${evidenceRows.length}`);
+await push('evidence', T('evidence'), evidenceRows, 10);
 
 // --- recommendations --------------------------------------------------------
 // Every recommendation is proposed, never applied. requires_approval is not a
@@ -127,7 +143,7 @@ const recRows = selected
     horizon: s.horizon ?? '3-12 months', status: 'proposed', requires_approval: true,
     approved_by: '', approved_at: '', declined_reason: '',
   }));
-console.log(`  recommendations  ${await insertMany(cfg, T('recommendations'), recRows, 10)} / ${recRows.length}`);
+await push('recommendations', T('recommendations'), recRows, 10);
 
 // --- audit ------------------------------------------------------------------
 const now = new Date().toISOString();
@@ -145,6 +161,11 @@ const auditRows = [
     engine_version: ENGINE_VERSION, occurred_at: now,
   })),
 ];
-console.log(`  audit_events     ${await insertMany(cfg, T('audit_events'), auditRows, 10)} / ${auditRows.length}`);
+await push('audit_events', T('audit_events'), auditRows, 10);
 
-console.log(`\npublished to Xano workspace ${cfg.workspace}.`);
+console.log(
+  anyFailed
+    ? `\n\x1b[31mpublished to Xano workspace ${cfg.workspace} with gaps — see failures above.\x1b[0m`
+    : `\npublished to Xano workspace ${cfg.workspace}.`,
+);
+process.exit(anyFailed ? 1 : 0);
