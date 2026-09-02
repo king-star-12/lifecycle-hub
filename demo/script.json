@@ -1,0 +1,67 @@
+[
+  {
+    "id": "01",
+    "beat": "hook",
+    "text": "A water main doesn't fail without warning. The warning just isn't in one place. It's split across a pressure sensor, a weather record, a complaint log, and a P D F somebody scanned years ago and nobody opened again."
+  },
+  {
+    "id": "02",
+    "beat": "network",
+    "text": "This is a distribution network. Nearly nineteen hundred segments, a hundred and four miles. Every pipe and every reading here is simulated, and the screen says so throughout. The web evidence later is real, and I'll show you exactly where that line sits."
+  },
+  {
+    "id": "03",
+    "beat": "baseline",
+    "text": "Most utilities prioritise by age. Oldest pipe first. It's a reasonable rule, and it's why this one almost got missed."
+  },
+  {
+    "id": "04",
+    "beat": "the-pipe",
+    "text": "W M sixteen oh four. Six inch steel on Atwood Street, laid in nineteen thirty six. It serves a hundred and seventy three people. Seven hundred and thirty eight pipes in this network are older than it is."
+  },
+  {
+    "id": "05",
+    "beat": "decomposition",
+    "text": "But a score here is never just a number. Every point of it is attributed. Age and material. An inspection finding. A previous break on this same segment. Ground moving underneath it. Each one tagged with where it came from."
+  },
+  {
+    "id": "06",
+    "beat": "documents",
+    "text": "That inspection is worth stopping on. Severe internal tuberculation, lifted straight out of the P D F by Nutrient D W S. And then this line. No active leak was detected at the time of inspection. That's true. It's also the exact sentence that gets a pipe deprioritised for another year."
+  },
+  {
+    "id": "07",
+    "beat": "external",
+    "text": "Then it looks outside itself. This is Serp A P I, live. Real reports of real breaks, on a real street. The pipe is simulated, the corridor is not, and the tool says so rather than blurring the two together."
+  },
+  {
+    "id": "08",
+    "beat": "rewind",
+    "text": "Now the part I'd want to see if I were buying this. Rewind, and ask what it knew before."
+  },
+  {
+    "id": "09",
+    "beat": "reconstruction",
+    "text": "Every frame is scored again from scratch, against a history cut off on that day. It cannot see forward. And watch them arrive. Pressure drifting from its zone. A break seventy three metres away. Complaints clustering. Flow creeping up."
+  },
+  {
+    "id": "10",
+    "beat": "crossing",
+    "text": "Ranked by pipe age it sits seven hundred and thirty ninth, and that never moves, because age doesn't change. Then ninety six days out, the score crosses the line where you'd send a crew. Eighth, out of nearly nineteen hundred."
+  },
+  {
+    "id": "11",
+    "beat": "honesty",
+    "text": "So here's the unflattering half. Walk forward across four years of history, and at that threshold it catches twenty six per cent of failures. Ninety two of them it never flags at all. I'd rather you heard that from me."
+  },
+  {
+    "id": "12",
+    "beat": "strength",
+    "text": "What it is good at is order. It ranks failures nearly twenty times better than chance. Pipe age alone manages two. And the bands mean what they say. Above sixty five, eighteen per cent break inside ninety days. Below twenty, across twenty three thousand scored days, not one did."
+  },
+  {
+    "id": "13",
+    "beat": "close",
+    "text": "That's Lifecycle Hub, from Clustral A I. It doesn't claim to predict pipes. It reads what the system was already telling you, and says when it's worth listening."
+  }
+]

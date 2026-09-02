@@ -1,5 +1,5 @@
 import { getBundle, getContext, latestDay } from '@/lib/data/store';
-import { scoreAsset, zoneBaselines } from '@/lib/risk/engine';
+import { scoreAsset, scoreNetwork, zoneBaselines } from '@/lib/risk/engine';
 
 /**
  * Failure reconstruction: re-scores one asset at successive points in the past,
@@ -15,7 +15,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const url = new URL(req.url);
   const ctx = getContext();
   const bundle = getBundle();
-  if (!ctx.assets.has(id)) return Response.json({ error: 'unknown asset' }, { status: 404 });
+  const asset = ctx.assets.get(id);
+  if (!asset) return Response.json({ error: 'unknown asset' }, { status: 404 });
 
   // Anchor on the asset's break if it has one, otherwise on today.
   const failure = bundle.failures.find((f) => f.asset_id === id);
@@ -33,6 +34,18 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const frames = [];
   for (let day = start; day <= anchor; day += step) {
     const score = scoreAsset(ctx, id, day, zoneBaselines(ctx, day));
+
+    // Where this segment sits in the queue, against the two methods utilities
+    // actually use. This is the comparison that matters: a pipe can be genuinely
+    // dangerous and still be buried hundreds of places down an age-sorted list,
+    // which is exactly how it gets left in the ground.
+    const year = Number(bundle.weather[day].date.slice(0, 4));
+    const all = scoreNetwork(ctx, day);
+    const engineRank = all.filter((s) => s.risk > score.risk).length + 1;
+
+    const ownAge = year - asset.install_year;
+    const ageRank = bundle.assets.filter((a) => year - a.install_year > ownAge).length + 1;
+
     frames.push({
       day,
       date: bundle.weather[day].date,
@@ -41,6 +54,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       confidence: score.confidence,
       trajectory: score.trajectory,
       families: score.convergence.families,
+      rank_engine: engineRank,
+      rank_age: ageRank,
+      network_size: bundle.assets.length,
       factors: score.factors.map((f) => ({
         key: f.key,
         label: f.label,

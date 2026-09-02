@@ -24,3 +24,9 @@ data/stage/
 .DS_Store
 .deploy/
 deploy.zip
+
+# Demo film working files
+tts-venv/
+demo/session.webm
+demo/audio/
+demo/qa/

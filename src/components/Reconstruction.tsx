@@ -11,6 +11,9 @@ type Frame = {
   confidence: number;
   trajectory: string;
   families: number;
+  rank_engine: number;
+  rank_age: number;
+  network_size: number;
   factors: {
     key: string;
     label: string;
@@ -49,7 +52,7 @@ export default function Reconstruction({
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    fetch(`/api/asset/${assetId}/reconstruct?span=200&step=4`)
+    fetch(`/api/asset/${assetId}/reconstruct?span=200&step=8`)
       .then((r) => r.json())
       .then((p: Payload) => {
         setData(p);
@@ -68,7 +71,7 @@ export default function Reconstruction({
         }
         return prev + 1;
       });
-    }, 150);
+    }, 260);
     return () => {
       if (timer.current) clearInterval(timer.current);
     };
@@ -202,6 +205,33 @@ export default function Reconstruction({
                 Evidence types
               </div>
               <div className="text-[17px] nums">{frame.families}</div>
+            </div>
+
+            <div className="ml-auto flex items-center gap-5 rounded-lg border border-line bg-surface px-4 py-2">
+              <div>
+                <div className="text-[9px] uppercase tracking-wider text-ink-faint">
+                  Rank by pipe age
+                </div>
+                <div className="text-[17px] nums text-ink-dim">
+                  {frame.rank_age}
+                  <span className="text-[10px] text-ink-faint"> / {frame.network_size}</span>
+                </div>
+              </div>
+              <div className="h-8 w-px bg-line" />
+              <div>
+                <div className="text-[9px] uppercase tracking-wider text-ink-faint">
+                  Rank by Lifecycle Hub
+                </div>
+                <div
+                  className="text-[17px] nums font-semibold"
+                  style={{ color: riskColor(frame.risk) }}
+                >
+                  {frame.rank_engine}
+                  <span className="text-[10px] font-normal text-ink-faint">
+                    {' '}/ {frame.network_size}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
